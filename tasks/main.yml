@@ -1,0 +1,88 @@
+---
+- name: "Ensure common packages are installed"
+  yum: 
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - curl
+    - unzip
+    - firewalld
+
+- name: "Ensure application group exists"
+  group:
+    name: "{{ application_group }}"
+    state: present
+
+- name: "Ensure application user exists"
+  user:
+    name: "{{ application_user }}"
+    state: present
+    group: "{{ application_group }}"
+
+- name: "Ensure consul is on the path"
+  unarchive:
+    src: "{{ application_download_link }}"
+    dest: /usr/local/bin
+    remote_src: yes 
+    mode: 0755
+    validate_certs: yes
+
+- name: "Ensure firewalld is running and enabled"
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: "Ensure consul api port is open"
+  firewalld:
+    state: enabled
+    zone: public 
+    immediate: yes
+    permanent: yes
+    port: "8500/tcp"
+
+- name: "Ensure consul nodes can talk to eachother"
+  firewalld:
+    state: enabled
+    zone: public
+    immediate: yes
+    permanent: yes
+    port: "8300-8302/tcp"
+
+
+- name: "Ensure consul configuration directory exists"
+  file:
+    path: /etc/consul.d/server
+    owner: "{{ application_user }}"
+    group: "{{ application_group }}"
+    state: directory
+
+- name: "Ensure consul data directory exists"
+  file:
+    path: /var/consul
+    owner: "{{ application_user }}"
+    group: "{{ application_group }}"
+    state: directory
+
+- name: "Ensure consul config template is written"
+  template:
+    src: config.json.j2
+    dest: /etc/consul.d/server/config.json
+    owner: "{{ application_user }}"
+    group: "{{ application_group }}"
+    
+- name: "Ensure consul runs as a service"
+  template:
+    src: "consul.service.j2"
+    dest: "/etc/systemd/system/consul.service"
+    owner: root
+    group: root
+    mode: 0444
+  
+- name: "Ensure consul service is enabled"
+  service:
+    name: consul.service
+    enabled: yes
+    state: restarted
+      

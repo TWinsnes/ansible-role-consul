@@ -1,0 +1,25 @@
+{
+  "bind_addr": "0.0.0.0",
+  "addresses": {
+    "http": "0.0.0.0"
+  },
+  "datacenter": "dc1",
+  "data_dir": "/var/consul",
+  "encrypt": "EXz7LFN8hpQ4id8EDYiFoQ==",
+  "log_level": "INFO",
+  "enable_syslog": true,
+  "enable_debug": true,
+  "node_name": "ConsulServer{{ groups[host_group_name].index(inventory_hostname) }}",
+  "server": true,
+  "bootstrap_expect": {{ groups[host_group_name]|length }},
+  "leave_on_terminate": false,
+  "skip_leave_on_interrupt": true,
+  "rejoin_after_leave": true,
+  "retry_interval": "30s",
+  "retry_join": [   
+    {% set comma = joiner(",") %}
+    {% for host in groups[host_group_name] %}
+      {{ comma() }}"{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}:8301"
+    {% endfor %}
+  ]
+ }

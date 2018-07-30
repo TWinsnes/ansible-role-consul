@@ -1,0 +1,14 @@
+[Unit]
+Description=Consul server
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User={{ application_user }}
+Group={{ application_group }}
+ExecStart=/usr/local/bin/consul agent -config-dir /etc/consul.d/server/
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
