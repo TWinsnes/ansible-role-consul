@@ -3,4 +3,4 @@ application_group: consul
 application_user: consul
 application_version: "1.2.1"
 application_download_link: "https://releases.hashicorp.com/consul/{{ application_version }}/consul_{{ application_version }}_linux_amd64.zip"
-host_group_name: vaults
+host_group_name: consuls
