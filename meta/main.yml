@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  role_name: consul
+  author: Thomas Winsnes
+  description: Consul cluster deployment for long running servers
+  company: Vibrato
+
+  license: license MIT
+
+  min_ansible_version: 1.2
+
+  platforms:
+    - name: EL
+      versions:
+        - 7
+
+  galaxy_tags: 
+    - Consul
+    - Hashicorp
+
+dependencies: []
