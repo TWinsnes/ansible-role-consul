@@ -29,3 +29,23 @@ This role has been tested on these OSes:
 `host_group_name` Name of the group in the inventory file containing the servers to run the role against. This is used to update the consul configuration file with all the servers in the cluster as part of the bootstrap process.
 
 > Default: consuls
+
+## How to import into your playbook
+
+To use this playbook in your playbook, install it from the ansible galaxy using the command below
+
+`ansible-galaxy install twinsnes.consul`
+
+Then add it to your playbook file and update any variables as in the example below.
+
+``` yaml
+---
+- hosts: vaults
+  become: true
+  roles:
+    - name: twinsnes.consul
+      vars:
+        host_group_name: vaults
+```
+
+Keep in mind that the host_group_name variable has to match the group of servers that this role is being deployed to in the inventory file
