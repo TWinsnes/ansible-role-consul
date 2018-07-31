@@ -1,6 +1,6 @@
-# Ansible role Consul
+# Ansible Role Consul
 
-Role for deploying a consul cluster
+Role for deploying a consul cluster on long running servers.
 
 ## Supported OSes
 
