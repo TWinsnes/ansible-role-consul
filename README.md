@@ -30,6 +30,10 @@ This role has been tested on these OSes:
 
 > Default: consuls
 
+`use_firewalld` If firewalld should be installed and set up for use with this installation
+
+> Default true
+
 ## How to import into your playbook
 
 To use this playbook in your playbook, install it from the ansible galaxy using the command below

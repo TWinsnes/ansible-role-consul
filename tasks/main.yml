@@ -7,7 +7,12 @@
   with_items:
     - curl
     - unzip
-    - firewalld
+
+- name: "Ensure firewalld is installed"
+  when: "use_firewalld == true"
+  yum:
+    name: "firewalld"
+    state: present
 
 - name: "Ensure application group exists"
   group:
@@ -29,12 +34,14 @@
     validate_certs: yes
 
 - name: "Ensure firewalld is running and enabled"
+  when: "use_firewalld == true"
   service:
     name: firewalld
     state: started
     enabled: yes
 
 - name: "Ensure consul api port is open"
+  when: "use_firewalld == true"
   firewalld:
     state: enabled
     zone: public 
@@ -43,6 +50,7 @@
     port: "8500/tcp"
 
 - name: "Ensure consul nodes can talk to eachother"
+  when: "use_firewalld == true"
   firewalld:
     state: enabled
     zone: public
